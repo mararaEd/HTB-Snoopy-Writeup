@@ -9,7 +9,7 @@ status: completed
 
 # HTB: Snoopy – Full Chain Walkthrough
 
-![[images/0snoopy_ico.png]]
+![](images/0snoopy_ico.png)
 
 | **Box Info**   |               |
 | -------------- | ------------- |
@@ -75,15 +75,15 @@ OS and Service detection performed. Please report any incorrect results at https
 
 Visiting port 80 displays **SnoopySec**, a security firm.
 
-![[images/1snoopySec.jpeg]]
+![](images/1snoopySec.jpeg)
 
 On the **Teams** page, we find various usernames all using the domain `snoopy.htb`.
 
-![[images/2snoopySec_team.png]]
+![](images/2snoopySec_team.png)
 
 The root page has links `/download` and `/download?file=announcement.pdf`. Both download a ZIP file named `press_release.zip`. Inspecting with BurpSuite, the second link includes a file `announcement.pdf` controlled by the `file` parameter.
 
-![[images/3snoopySec_download.png]]
+![](images/3snoopySec_download.png)
 
 Visiting the **Contact** section, a notice is displayed at the top:
 
@@ -97,7 +97,7 @@ There is also a form, but submitting it returns an error:
 Unable to load the "PHP Email form" Library!
 ```
 
-![[images/4snoopySec_contact.png]]
+![](images/4snoopySec_contact.png)
 
 ### DNS Enumeration
 
@@ -121,7 +121,7 @@ Notice `mail.snoopy.htb` is missing – confirming the DNS maintenance notice.
 
 All discovered subdomains are added to `/etc/hosts`. Browsing each reveals that `mm.snoopy.htb` hosts a **Mattermost** instance.
 
-![[images/6snoopy_mattermost.jpeg]]
+![](images/6snoopy_mattermost.jpeg)
 
 The **Forgot your password?** link provides a form. Entering one of the emails from the Teams page returns an error about sending the password reset email – likely due to the mailserver DNS issue.
 
@@ -132,7 +132,7 @@ The `download?file=` parameter downloads a ZIP archive. Testing `download?file=.
 
 **Payload:** `download?file=....//....//....//....//....//etc/passwd`
 
-![[images/10snoopy.png]]
+![](images/10snoopy.png)
 
 ### LFI Automation Script
 
@@ -186,14 +186,14 @@ echo "[*] Done. Extracted files are in $PWD"
 
 ##### Running the bash script  with a prepared wordlist
 
-![[images/11snoopy_term.png]]
+![](images/11snoopy_term.png)
 
-![[images/12snoopy.png]]
+![](images/12snoopy.png)
 ### Extracting rndc.key
 
 Using the LFI, read the BIND configuration files and extract the `rndc.key`:
 
-![[images/13snoopy.png]]
+![](images/13snoopy.png)
 
 
 ## DNS Poisoning
@@ -266,7 +266,7 @@ The link has some extra encoding in it that’s handled by SMTP. `=` is used in 
 
  Visit the link, set a new password for `sbrown`, and gain access to Mattermost.
 
-![[images/14snoopy.jpeg]]
+![](images/14snoopy.jpeg)
 
 
 
@@ -276,11 +276,11 @@ Inside Mattermost, the **Town Square** channel contains important messages
 
 - First, there are messages about server provisioning:
 
-![[images/15snoopy.jpeg]]
+![](images/15snoopy.jpeg)
 
 - And then, they talk about Antivirus called *ClamAV*
 
-![[images/16snoopy.jpeg]]
+![](images/16snoopy.jpeg)
 
 Searching for *Server* in the channel search box, reveals the `Server Provisioning Channel`. It's empty and anyone can join
 
@@ -288,11 +288,11 @@ Searching for *Server* in the channel search box, reveals the `Server Provisioni
 
 Typing `/` reveals all available commands. One command opens a dialog asking for an **Operating System** and an **IP address**.
 
-![[images/19snoopy.jpeg]]
+![](images/19snoopy.jpeg)
 
 Enter the attacker's IP and start a netcat listener on port 2222:
 
-![[images/20snoopy.png]]
+![](images/20snoopy.png)
 
 ```bash
 ┌──(copyN1nja㉿kali)-[~]
@@ -315,7 +315,7 @@ Before that,  set up `socat` to forward port 2222 to local port 22, and run an S
 └─$ socat TCP4-LISTEN:2222,fork TCP4:localhost:22
 ```
 
-![[images/21snoopy.png]]
+![](images/21snoopy.png)
 
 Captured credentials: `cbrown : sn00pedcr3dential!!!`
 
@@ -401,7 +401,7 @@ Applied patch renamed_target/authorized_keys cleanly.
 
 Now SSH as `sbrown` using the corresponding private key.
 
-![[images/23snoopy_user.png]]
+![](images/23snoopy_user.png)
 
 
 ## Privilege Escalation: sbrown → root (CVE‑2023‑20052)
