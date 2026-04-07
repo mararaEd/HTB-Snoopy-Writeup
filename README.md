@@ -1,6 +1,6 @@
 
 ---
-tags: #hackthebox, #linux, #cve-2023-23946, #cve-2023-20052, #lfi, #dns-poisoning, #xxe]
+`#hackthebox` `#linux` `#hard` `#cve-2023-23946` `#cve-2023-20052` `#lfi` `#dns-poisoning` `#xxe`
 platform: HackTheBox
 difficulty: Hard
 status: completed
